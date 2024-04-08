@@ -4,7 +4,7 @@ from .models import *
 
 
 def save_ip_info():
-    url = f"https://proxylist.geonode.com/api/proxy-list?limit=5&page=1&sort_by=lastChecked&sort_type=desc"
+    url = f"https://proxylist.geonode.com/api/proxy-list?limit=500&page=1&sort_by=lastChecked&sort_type=desc"
     response = httpx.get(url)
     if response.status_code == 200:
         res = response.json()
