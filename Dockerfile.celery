@@ -1,0 +1,13 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ENV REDIS_URL=redis://127.0.0.1:6379/2
+
+CMD celery -A core worker --beat --loglevel=info

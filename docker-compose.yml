@@ -1,0 +1,36 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+       - .:/app
+    ports:
+      - 8010:8010
+    environment:
+      - REDIS_URL=redis://redis:6379/2
+
+  nginx:
+    build: ./nginx
+    ports:
+      - '80:80'
+    volumes:
+       - ./nginx/:/etc/nginx
+    depends_on:
+      - web
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    volumes:
+       - .:/app
+    environment:
+      - REDIS_URL=redis://redis:6379/2
+    depends_on:
+      - web
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  
