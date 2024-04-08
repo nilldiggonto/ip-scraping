@@ -7,14 +7,14 @@ from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
-app = Celery("core", broker=os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'))
+app = Celery("core", broker=os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/2'))
 
 app.conf.broker_connection_retry_on_startup = True
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
-
+app.conf.result_backend = 'rpc'
 
 app.conf.beat_schedule = {
-    'add-every-5-minutes': { 
+    'scrap-every-day': { 
         'task': 'scrap.tasks.task_save_ip_info',
         'schedule': timedelta(days=1),
     }
